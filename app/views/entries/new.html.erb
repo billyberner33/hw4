@@ -1,22 +1,35 @@
-<h1>New Entry</h1>
+<% if session[:user_id]%>
+  <div class="container-fluid mt-4 px-0"> 
+    <div class="row g-0"> 
+      <div class="col-6"> 
 
-<form action="/entries" method="post">
-  <input type="hidden" name="place_id" value="<%= params["place_id"] %>">
+        <h2 class="text-start">New Entry</h2>
 
-  <p>
-    <label for="title_input">Title</label>
-    <input type="text" name="title" id="title_input">
-  </p>
+  <form action="/entries" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="place_id" value="<%= params["place_id"] %>">
 
-  <p>
-    <label for="description_input">Description</label>
-    <input type="text" name="description" id="description_input">
-  </p>
+  <div class="mb-3">
+  <label for="title_input" class="form-label">Title</label>
+  <input type="text" name="title" id="title_input" class="form-control" placeholder="Enter title" required>
+  </div>
 
-  <p>
-    <label for="occurred_on_input">Occurred On</label>
-    <input type="date" name="occurred_on" id="occurred_on_input">
-  </p>
+  <div class="mb-3">
+  <label for="description_input" class="form-label">Description</label>
+  <textarea name="description" id="description_input" class="form-control" rows="3" placeholder="Write a short description"></textarea>
+  </div>
 
-  <button>Save</button>
-</form>
+  <div class="mb-3">
+  <label for="occurred_on_input" class="form-label">Occurred On</label>
+  <input type="date" name="occurred_on" id="occurred_on_input" class="form-control">
+  </div>
+
+  <div class="mb-3">
+  <label for="uploaded_image_input" class="form-label">Upload Image</label>
+  <input type="file" name="uploaded_image" id="uploaded_image_input" class="form-control" accept="image/png, image/jpg, image/jpeg, image/gif">
+  </div>
+
+    <button class="btn btn-outline-secondary">Save</button>
+  </form>
+<% else %>
+  <p>You have to be logged in to create a new entry</p>
+<% end %>

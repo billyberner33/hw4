@@ -1,10 +1,20 @@
-<h1>New Place</h1>
+<% if session["user_id"] != nil%>
 
-<form action="/places" method="post">
-  <p>
-    <label for="name_input">Name</label>
-    <input type="text" name="name" id="name_input">
-  </p>
+<h1 class="display-4 mb-4">Create a New Place</h1>
 
-  <button>Save</button>
-</form>
+  <div class="card shadow-sm p-4">
+  <form action="/places" method="post">
+  <div class="mb-3">
+  <label for="name_input" class="form-label fw-bold">Place Name</label>
+  <input type="text" name="name" id="name_input" class="form-control" placeholder="Enter place name" required>
+  </div>
+
+  <button class="btn btn-outline-secondary">Save Place</button>
+  </form>
+  </div>
+
+<% else %>
+<div class="alert alert-warning mt-3">
+<p>You have to be logged in to create a new place</p>
+</div>
+<% end %>

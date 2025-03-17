@@ -13,10 +13,16 @@ class PlacesController < ApplicationController
   end
 
   def create
-    @place = Place.new
-    @place["name"] = params["name"]
-    @place.save
-    redirect_to "/places"
-  end
+    if User.find_by({ "id" => session["user_id"]})
+      @place = Place.new
+      @place["name"] = params["name"]
+      @place.save
 
+      flash["notice"] = "Place was successfully created"
+      redirect_to "/places"
+    else
+      flash["notice"] = "You have to be logged in"
+      redirect_to "/places"
+    end
+  end
 end
