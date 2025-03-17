@@ -1,7 +1,8 @@
 class EntriesController < ApplicationController
+  before_action :require_login
 
   def index
-    @entries = Entry.where({ "user_id" => session["user_id"] })
+    @entries = current_user.entries  # Only fetch entries for the logged-in user
   end
 
   def new
@@ -9,18 +10,26 @@ class EntriesController < ApplicationController
   end
 
   def create
-    if User.find_by({ "id" => session["user_id"] }) != nil
-      @entry = Entry.new
-      @entry["title"] = params["title"]
-      @entry["description"] = params["description"]
-      @entry["occurred_on"] = params["occurred_on"]
-      @entry.uploaded_image.attach(params["uploaded_image"])
-      @entry["place_id"] = params["place_id"]
-      @entry["user_id"] = session["user_id"]
-      @entry.save
+    @entry = current_user.entries.build(entry_params)  # Assigns entry to logged-in user
+    if @entry.save
+      flash[:notice] = "Entry created successfully!"
+      redirect_to place_path(@entry.place_id)  # Redirect to the specific place's page
     else 
-      flash["notice"] = "Login first."
+      flash[:alert] = "Something went wrong."
+      render :new
     end 
-    redirect_to "/places/#{@entry["place_id"]}"
+  end
+
+  private
+
+  def entry_params
+    params.require(:entry).permit(:title, :description, :occurred_on, :uploaded_image, :place_id)
+  end
+
+  def require_login
+    unless logged_in?
+      flash[:alert] = "You must be logged in to perform this action."
+      redirect_to login_path
+    end
   end
 end
