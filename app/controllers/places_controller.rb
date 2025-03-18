@@ -2,13 +2,18 @@ class PlacesController < ApplicationController
   before_action :require_login, only: [:new, :create]
 
   def index
-    @places = Place.all
+    if logged_in?
+      @places = Place.joins(:entries).where(entries: { user_id: current_user.id }).distinct
+    else
+      @places = []
+    end
   end
+  
 
   def show
     @place = Place.find_by(id: params[:id])
     if @place
-      @entries = @place.entries.where(user_id: session[:user_id]) if @place.respond_to?(:entries)
+      @entries = @place.entries.where(user_id: current_user.id) if @place.respond_to?(:entries)
     else
       flash[:alert] = "Place not found."
       redirect_to places_path

@@ -3,7 +3,7 @@ class EntriesController < ApplicationController
   before_action :set_place, only: [:new, :create, :index]
 
   def index
-    @entries = @place.entries.where(user: current_user)  # Fetch only logged-in user's entries for this place
+    @entries = @place.entries.where(user: current_user)
   end
 
   def new

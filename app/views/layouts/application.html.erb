@@ -15,7 +15,7 @@
       <%= link_to "Home", root_path %> |
       <% if logged_in? %>
         Logged in as: <strong><%= current_user.username %></strong> |
-        <%= link_to "Logout", logout_path, method: :delete %>
+        <%= link_to "Logout", logout_path %>
       <% else %>
         <%= link_to "Login", login_path %> |
         <%= link_to "Sign Up", signup_path %>
