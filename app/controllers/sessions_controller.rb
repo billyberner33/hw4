@@ -3,21 +3,21 @@ class SessionsController < ApplicationController
   end
 
   def create
-    @user = User.find_by(email: params[:email])
+    @user = User.find_by(email: params["email"])
     
-    if @user && @user.authenticate(params[:password])
-      session[:user_id] = @user.id
-      flash[:notice] = "Welcome, #{@user.username}"
+    if @user && BCrypt::Password.new(@user.password) == params["password"]
+      session["user_id"] = @user.id
+      flash["notice"] = "Welcome, #{@user.username}"
       redirect_to "/places"
     else
-      flash[:notice] = "Invalid email or password."
+      flash["notice"] = "Invalid email or password"
       redirect_to "/login"
     end
   end
 
   def destroy
-    session[:user_id] = nil
-    flash[:notice] = "Goodbye."
+    session["user_id"] = nil
+    flash["notice"] = "Logged out successfully"
     redirect_to "/login"
   end
 end
