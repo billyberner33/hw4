@@ -1,10 +1,18 @@
 Rails.application.routes.draw do
-  get("/", { :controller => "places", :action => "index" })
-  resources "entries"
-  resources "places"
-    resources "users"
-  resources "sessions"
-  get("/login", {:controller => "sessions", :action => "new"})
-  get("/logout", {:controller => "sessions", :action => "destroy"})
-  get("/", {:controller => "sessions", :action => "new"})
+  # Home page (redirects to places index)
+  root to: "places#index"
+
+  # Resourceful routes
+  resources :entries
+  resources :places
+  resources :users
+  resources :sessions, only: [:new, :create, :destroy]
+
+  # Authentication routes
+  get "/signup", to: "users#new", as: "signup"
+  post "/users", to: "users#create"
+  
+  get "/login", to: "sessions#new", as: "login"
+  post "/sessions", to: "sessions#create"
+  delete "/logout", to: "sessions#destroy", as: "logout"
 end

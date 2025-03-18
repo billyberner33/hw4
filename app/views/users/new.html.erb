@@ -1,27 +1,24 @@
-<h1 class="mb-4 text-left">Create a New Account</h1>
+<h1>Sign Up</h1>
 
-<div class="container-fluid">
-  <div class="row">
-    <div class="col-md-4">
-      <form action="/users" method="post" class="p-4 border rounded shadow-sm bg-light">
-        
-        <div class="mb-3">
-          <label for="username" class="form-label">Username</label>
-          <input type="text" name="username" id="username" class="form-control" placeholder="Enter your username" required>
-        </div>
-
-        <div class="mb-3">
-          <label for="email" class="form-label">Email</label>
-          <input type="email" name="email" id="email" class="form-control" placeholder="Enter your email" required>
-        </div>
-
-        <div class="mb-3">
-          <label for="password" class="form-label">Password</label>
-          <input type="password" name="password" id="password" class="form-control" placeholder="Create a password" required>
-        </div>
-
-        <button type="submit" class="btn btn-outline-secondary">Sign Up</button>
-      </form>
-    </div>
+<%= form_with url: "/users", method: "post", local: true do |form| %>
+  <div>
+    <%= form.label :username, "Username" %><br>
+    <%= form.text_field :username, required: true %>
   </div>
-</div>
+
+  <div>
+    <%= form.label :email, "Email" %><br>
+    <%= form.email_field :email, required: true %>
+  </div>
+
+  <div>
+    <%= form.label :password, "Password" %><br>
+    <%= form.password_field :password, required: true %>
+  </div>
+
+  <div>
+    <%= form.submit "Create Account" %>
+  </div>
+<% end %>
+
+<p>Already have an account? <%= link_to "Log in", login_path %></p>

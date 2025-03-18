@@ -20,16 +20,21 @@ class PlacesController < ApplicationController
   end
 
   def create
-    @place = Place.new(place_params)
-    if @place.save
-      flash[:notice] = "Place was successfully created"
-      redirect_to places_path
+    if session[:user_id] # Ensure user is logged in
+      @place = Place.new(name: params[:name]) # Use params[:name] directly
+      if @place.save
+        flash[:notice] = "Place was successfully created."
+        redirect_to places_path
+      else
+        flash[:alert] = "Error creating place."
+        render :new
+      end
     else
-      flash[:alert] = "Something went wrong"
-      render :new
+      flash[:alert] = "You must be logged in to create a place."
+      redirect_to login_path
     end
   end
-
+  
   private
 
   def place_params
