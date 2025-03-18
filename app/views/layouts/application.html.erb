@@ -5,21 +5,26 @@
   <%= csrf_meta_tags %>
   <%= csp_meta_tag %>
 
-  <%= stylesheet_link_tag "application", media: "all", "data-turbo-track": "reload" %>
-  <%= javascript_include_tag "application", "data-turbo-track": "reload" %>
+  <%= stylesheet_link_tag "application", media: "all" %>
+  <%= javascript_include_tag "application" %>
 </head>
-<body>
-  <h1><%= link_to "Travel Journal", root_path %></h1>
-  
-  <ul>
-    <% if session[:user_id] %>
-      <li><%= link_to "Logout", logout_path, method: :delete %></li>
-    <% else %>
-      <li><%= link_to "Login", login_path %></li>
-      <li><%= link_to "Sign Up", signup_path %></li>
-    <% end %>
-  </ul>
 
-  <%= yield %> <!-- This ensures the page content loads here -->
+<body>
+  <header>
+    <nav>
+      <%= link_to "Home", root_path %> |
+      <% if logged_in? %>
+        Logged in as: <strong><%= current_user.username %></strong> |
+        <%= link_to "Logout", logout_path, method: :delete %>
+      <% else %>
+        <%= link_to "Login", login_path %> |
+        <%= link_to "Sign Up", signup_path %>
+      <% end %>
+    </nav>
+  </header>
+
+  <main>
+    <%= yield %>
+  </main>
 </body>
 </html>
