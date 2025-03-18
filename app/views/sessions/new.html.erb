@@ -1,20 +1,19 @@
-<h1 class="mb-4 text-left">Login</h1>
+<h1>Log In</h1>
 
-<div class="container-fluid">
-<div class="row">
-<div class="col-md-4"> <!-- Adjusts form width -->
-<form action="/sessions" method="post" class="p-4 border rounded shadow-sm bg-light">
-        
-<div class="mb-3">
-<label for="email" class="form-label">Email</label>
-<input type="email" name="email" id="email" class="form-control" placeholder="Enter your email" required>
-</div>
+<%= form_with url: sessions_path, method: "post", local: true do |form| %>
+  <div>
+    <%= form.label :email, "Email" %><br>
+    <%= form.email_field :email, required: true %>
+  </div>
 
-<div class="mb-3">
-<label for="password" class="form-label">Password</label>
-<input type="password" name="password" id="password" class="form-control" placeholder="Enter your password" required>
-</div>
+  <div>
+    <%= form.label :password, "Password" %><br>
+    <%= form.password_field :password, required: true %>
+  </div>
 
-<button type="submit" class="btn btn-outline-secondary">Login</button>
+  <div>
+    <%= form.submit "Log In" %>
+  </div>
+<% end %>
 
-<div class="text-center mt-3">
+<p>Don't have an account? <%= link_to "Sign Up", signup_path %></p>

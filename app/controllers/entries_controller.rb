@@ -1,29 +1,37 @@
 class EntriesController < ApplicationController
   before_action :require_login
+  before_action :set_place, only: [:new, :create, :index]
 
   def index
-    @entries = current_user.entries  # Only fetch entries for the logged-in user
+    @entries = @place.entries.where(user: current_user)  # Fetch only logged-in user's entries for this place
   end
 
   def new
-    @entry = Entry.new
+    @place = Place.find(params[:place_id])
+    @entry = @place.entries.build
   end
-
+  
   def create
-    @entry = current_user.entries.build(entry_params)  # Assigns entry to logged-in user
+    @place = Place.find(params[:place_id])
+    @entry = @place.entries.build(entry_params.merge(user: current_user)) 
+  
     if @entry.save
       flash[:notice] = "Entry created successfully!"
-      redirect_to place_path(@entry.place_id)  # Redirect to the specific place's page
+      redirect_to place_path(@place)
     else 
       flash[:alert] = "Something went wrong."
       render :new
     end 
-  end
+  end  
 
   private
 
+  def set_place
+    @place = Place.find(params[:place_id])  # Find the place from the nested route
+  end
+
   def entry_params
-    params.require(:entry).permit(:title, :description, :occurred_on, :uploaded_image, :place_id)
+    params.require(:entry).permit(:title, :description, :occurred_on, :uploaded_image)
   end
 
   def require_login

@@ -8,7 +8,7 @@ class PlacesController < ApplicationController
   def show
     @place = Place.find_by(id: params[:id])
     if @place
-      @entries = @place.entries.where(user_id: session[:user_id])  # Only show logged-in user's entries
+      @entries = @place.entries.where(user_id: session[:user_id]) if @place.respond_to?(:entries)
     else
       flash[:alert] = "Place not found."
       redirect_to places_path

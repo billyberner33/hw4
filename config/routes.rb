@@ -3,8 +3,10 @@ Rails.application.routes.draw do
   root to: "places#index"
 
   # Resourceful routes
-  resources :entries
-  resources :places
+  resources :places do
+    resources :entries, only: [:new, :create, :index]
+  end  
+  
   resources :users
   resources :sessions, only: [:new, :create, :destroy]
 
